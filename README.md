@@ -13,7 +13,7 @@ In lieu of a configuration UI, this extension uses settings defined in civicrm.s
 Example (to be added to civicrm.settings.php):
 ```php
 global $civicrm_setting;
-$civicrm_setting['com.joineryhq.fbhash']['hashedFilters'] = [
+$civicrm_setting['com.joineryhq.fbhash']['com.joineryhq.fbhash']['fbhash_hashedFilters'] = [
   'afsearchMemberStatus' => [
     'member_id',
   ],
@@ -26,7 +26,7 @@ $civicrm_setting['com.joineryhq.fbhash']['hashedFilters'] = [
 This nested array format is fragile but explicit, allowing to specify any url parameters for any FormBuilder form. The format is as follows:
 ```php
 global $civicrm_setting;
-$civicrm_setting['com.joineryhq.fbhash']['hashedFilters'] = [
+$civicrm_setting['com.joineryhq.fbhash']['com.joineryhq.fbhash']['fbhash_hashedFilters'] = [
   [afformName] => [
     [queryParameterName],
   ],

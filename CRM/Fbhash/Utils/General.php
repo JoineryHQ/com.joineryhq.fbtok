@@ -10,13 +10,14 @@ class CRM_Fbhash_Utils_General {
 
   const HASH_SEPARATOR = '|';
 
-  public static function fixmeDataHashedFilters() {
-    return [];
+  public static function getHashedFilterConfig() {
+    $extSettings = \Civi::settings()->get('com.joineryhq.fbhash');
+    return ($extSettings['fbhash_hashedFilters'] ?? []);
   }
 
   public static function getHashedFilters($afformName) {
-    $allFilters = CRM_Fbhash_Utils_General::fixmeDataHashedFilters();
-    return $allFilters[$afformName] ?? [];
+    $allFilters = CRM_Fbhash_Utils_General::getHashedFilterConfig();
+    return ($allFilters[$afformName] ?? []);
   }
 
   public static function hashValue($value) {
