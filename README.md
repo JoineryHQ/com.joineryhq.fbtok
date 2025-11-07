@@ -1,13 +1,72 @@
 # CiviCRM: FormBuilder hash filters
-## com.joineryhq.fbhash
-(*FIXME: In one or two paragraphs, describe what the extension does and why one would download it. *)
 
-This is an [extension for CiviCRM](https://docs.civicrm.org/sysadmin/en/latest/customize/extensions/), licensed under [GPL-3.0](LICENSE.txt).
+This CiviCRM extension allows site administrators to specify that, for certain FormBuilder forms, certain url parameters should be hashed in a way that makes them hard to guess.
 
-## Getting Started
+**Example use case**
+- You have a FormBuilder form which includes a SearchKit display, for the purpose of allowing anonymous users to view a specific set of data at a given URL, e.g. https://example.org/civicrm/member-status/#?member_id=123 displays basic current membership status information for a member with `membership_id=123`
+- An anonymous user who knows this URL _should_ be able to view the information for member `123`, but you don't want them to start mining your data by changing the `membership_id` query parameter (e.g. `/#?member_id=124`, `/#?member_id=125`, etc.)
+- By using this extension, you can generate (and share) a URL in which the membership_id is hashed in an unguessable way (e.g. https://example.org/civicrm/member-status/#?member_id=5a53990cc6f92f7d5cae2e4c8930cc8eb61694efa029c9d8eab9b3536d72cf9|123), so that merely changing the `123` to `124` will create a non-functional URL, thus protecting the privacy of member '124' (and other members).
 
-(* FIXME: Where would a new user navigate to get started? What changes would they see? *)
+## Configuration
+In lieu of a configuration UI, this extension uses settings defined in civicrm.settings.php. (A configuration UI would be nice to have, but does not yet exist.)
 
-## Known Issues
+Example (to be added to civicrm.settings.php):
+```php
+global $civicrm_setting;
+$civicrm_setting['com.joineryhq.fbhash']['hashedFilters'] = [
+  'afsearchMemberStatus' => [
+    'member_id',
+  ],
+  'afsearchContactInfo' => [
+    'contact_id',
+  ],
+];
+```
 
-(* FIXME *)
+This nested array format is fragile but explicit, allowing to specify any url parameters for any FormBuilder form. The format is as follows:
+```php
+global $civicrm_setting;
+$civicrm_setting['com.joineryhq.fbhash']['hashedFilters'] = [
+  [afformName] => [
+    [queryParameterName],
+  ],
+];
+```
+
+### [afformName]
+Machine name for the given FormBuilder form.
+
+### [queryParameterName]
+Query paramter name, as defined in FormBuilder display settings Filters (url).
+
+
+## Usage
+
+The hashing functionality is unlikely to be useful on its own. This extension provides a static utility method, `CRM_Fbhash_Utils_General::getAfformHashedUrl($afformName, $filters)`, which can be called like so:
+
+```php
+    $filters = ['member_id' => '123'];
+    $afformUrl = CRM_Fbhash_Utils_General::getAfformHashedUrl('afsearchMemberStatus', $filters);
+```
+
+- Only query parameters which are defined in `$civicrm_setting['com.joineryhq.fbhash']['hashedFilters']` will be hashed.
+- For any FormBuilder form so defined, the defined query parameters will be hashed, and any access to that form will require that the given parameters have a valid hash.
+  - An invalid query parameter hash will cause no records to be loaded when the FormBuilder form is accessed.
+  - An empty value constitutes an invalid hash, thus making the given query parameter _required_.
+
+## Ideas for improvement
+This project is open to PRs for improvements, including the following:
+- Support for an API in place of the static utility method `CRM_Fbhash_Utils_General::getAfformHashedUrl($afformName, $filters)`
+- Creation of a UI to replace configuration in civicrm.settings.php.
+- Display of a "No records found" or "Permission denied" message in the case of an invalid hash value, instead of the current behavior showing merely blank results.
+
+
+## Installation
+* Copy this package to your CiviCRM extensions directory (in WordPress, that's typically `[document-root]/wp-content/uploads/civicrm/ext`
+* In CiviCRM, enable the extension "AJAX API Identifier".
+
+## Support
+
+Support for this plugin is handled under Joinery's ["As-Is Support" policy](https://joineryhq.com/software-support-levels#as-is-support).
+
+Public issue queue for this plugin: https://github.com/JoineryHQ/com.joineryhq.fbhash/issues
