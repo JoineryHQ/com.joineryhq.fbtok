@@ -23,7 +23,8 @@ class CRM_Fbhash_Utils_General {
   public static function hashValue($value) {
     $salt = CIVICRM_SITE_KEY;
     $saltedValue = $value . $salt;
-    // $hashType = 'xxh64';
+//    $hashAlgo = 'xxh64';
+//    $hashAlgo = 'xxh32';
     $hashAlgo = 'sha256';
     $ret = hash($hashAlgo, $saltedValue) . CRM_Fbhash_Utils_General::HASH_SEPARATOR . $value;
     return $ret;
@@ -65,21 +66,6 @@ class CRM_Fbhash_Utils_General {
       $ret[$filterKey] = CRM_Fbhash_Utils_General::hashValue($filters[$filterKey]);
     }
     return $ret;
-  }
-
-  public static function getAfformHashedUrl($afformName, array $filters = []) {
-    $afform = \Civi\Api4\Afform::get()
-      ->setCheckPermissions(FALSE)
-      ->addWhere('name', '=', $afformName)
-      ->setLimit(1)
-      ->execute()
-      ->first();
-    $url = CRM_Utils_System::url($afform['server_route'], NULL, TRUE);
-    if (!empty($filters)) {
-      $filters = CRM_Fbhash_Utils_General::hashFilters($afformName, $filters);
-      $url .= '#/?' . http_build_query($filters);
-    }
-    return $url;
   }
 
 }

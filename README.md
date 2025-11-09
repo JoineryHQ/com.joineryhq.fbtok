@@ -42,11 +42,19 @@ Query paramter name, as defined in FormBuilder display settings Filters (url).
 
 ## Usage
 
-The hashing functionality is unlikely to be useful on its own. This extension provides a static utility method, `CRM_Fbhash_Utils_General::getAfformHashedUrl($afformName, $filters)`, which can be called like so:
+The hashing functionality is unlikely to be useful on its own. This extension
+provides an API, `Fbhash.HashAfformUrl`, which can be called like so:
 
 ```php
     $filters = ['member_id' => '123'];
-    $afformUrl = CRM_Fbhash_Utils_General::getAfformHashedUrl('afsearchMemberStatus', $filters);
+    $afformName = 'afsearchMembershipStatus';
+    $fbhash = \Civi\Api4\Fbhash::hashAfformUrl()
+      ->setCheckPermissions(FALSE)
+      ->setFilters($filters)
+      ->setAfformName($afformName)
+      ->execute()
+      ->first();
+    $hashedUrl = $fbhash['url'];
 ```
 
 - Only query parameters which are defined in `$civicrm_setting['com.joineryhq.fbhash']['hashedFilters']` will be hashed.
@@ -56,7 +64,6 @@ The hashing functionality is unlikely to be useful on its own. This extension pr
 
 ## Ideas for improvement
 This project is open to PRs for improvements, including the following:
-- Support for an API in place of the static utility method `CRM_Fbhash_Utils_General::getAfformHashedUrl($afformName, $filters)`
 - Creation of a UI to replace configuration in civicrm.settings.php.
 - Display of a "No records found" or "Permission denied" message in the case of an invalid hash value, instead of the current behavior showing merely blank results.
 
