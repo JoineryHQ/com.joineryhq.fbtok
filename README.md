@@ -82,7 +82,7 @@ This project is open to PRs for improvements, including the following:
 
 ## Installation
 * Copy this package to your CiviCRM extensions directory (in WordPress, that's typically `[document-root]/wp-content/uploads/civicrm/ext`
-* In CiviCRM, enable the extension "AJAX API Identifier".
+* In CiviCRM, enable the extension "FormBuilder Hash Filters".
 
 ## Support
 
