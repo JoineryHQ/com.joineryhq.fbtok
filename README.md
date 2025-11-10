@@ -13,12 +13,15 @@ In lieu of a configuration UI, this extension uses settings defined in civicrm.s
 Example (to be added to civicrm.settings.php):
 ```php
 global $civicrm_setting;
-$civicrm_setting['com.joineryhq.fbhash']['com.joineryhq.fbhash']['fbhash_hashedFilters'] = [
-  'afsearchMemberStatus' => [
-    'member_id',
-  ],
-  'afsearchContactInfo' => [
-    'contact_id',
+$civicrm_setting['com.joineryhq.fbhash']['com.joineryhq.fbhash'] = [
+  'algorithm' => 'sha3-512',
+  'fbhash_hashedFilters' => [
+    'afsearchMemberStatus' => [
+      'member_id',
+    ],
+    'afsearchContactInfo' => [
+      'contact_id',
+    ],
   ],
 ];
 ```
@@ -26,12 +29,21 @@ $civicrm_setting['com.joineryhq.fbhash']['com.joineryhq.fbhash']['fbhash_hashedF
 This nested array format is fragile but explicit, allowing to specify any url parameters for any FormBuilder form. The format is as follows:
 ```php
 global $civicrm_setting;
-$civicrm_setting['com.joineryhq.fbhash']['com.joineryhq.fbhash']['fbhash_hashedFilters'] = [
-  [afformName] => [
-    [queryParameterName],
+$civicrm_setting['com.joineryhq.fbhash']['com.joineryhq.fbhash'] = [
+  'algorithm' => [hashAlgo], 
+  'fbhash_hashedFilters'] = [
+    [afformName] => [
+      [queryParameterName],
+    ],
   ],
 ];
 ```
+
+### [hashAlgo]
+Any available hash algorithm supported by PHP. See output of PHP's `hash_algos()`
+for a valid list.
+
+If no valid algorithm is specified, the extension will use 'sha-256'.
 
 ### [afformName]
 Machine name for the given FormBuilder form.
@@ -43,7 +55,7 @@ Query paramter name, as defined in FormBuilder display settings Filters (url).
 ## Usage
 
 The hashing functionality is unlikely to be useful on its own. This extension
-provides an API, `Fbhash.HashAfformUrl`, which can be called like so:
+provides a v4 API, `Fbhash.HashAfformUrl`, which can be called like so:
 
 ```php
     $filters = ['member_id' => '123'];

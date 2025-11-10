@@ -10,22 +10,27 @@ class CRM_Fbhash_Utils_General {
 
   const HASH_SEPARATOR = '|';
 
-  public static function getHashedFilterConfig() {
-    $extSettings = \Civi::settings()->get(E::LONG_NAME);
-    return ($extSettings['fbhash_hashedFilters'] ?? []);
+  public static function getSetting($settingName, $default = NULL) {
+    if (!isset(Civi::$statics[__CLASS__]['extSettings'])) {
+      Civi::$statics[__CLASS__]['extSettings'] = \Civi::settings()->get(E::LONG_NAME);
+    }
+    return (Civi::$statics[__CLASS__]['extSettings'][$settingName] ?? $default);
   }
 
   public static function getHashedFilters($afformName) {
-    $allFilters = CRM_Fbhash_Utils_General::getHashedFilterConfig();
+    $allFilters = CRM_Fbhash_Utils_General::getSetting('fbhash_hashedFilters');
     return ($allFilters[$afformName] ?? []);
   }
 
   public static function hashValue($value) {
     $salt = CIVICRM_SITE_KEY;
     $saltedValue = $value . $salt;
-//    $hashAlgo = 'xxh64';
-//    $hashAlgo = 'xxh32';
-    $hashAlgo = 'sha256';
+    $fallbackHashAlgo = 'sha256';
+    $hashAlgo = CRM_Fbhash_Utils_General::getSetting('algorithm', $fallbackHashAlgo);
+    if (!in_array($hashAlgo, hash_algos())) {
+      // invalid hash algo; use sha256
+      $hashAlgo = $fallbackHashAlgo;
+    }
     $ret = hash($hashAlgo, $saltedValue) . CRM_Fbhash_Utils_General::HASH_SEPARATOR . $value;
     return $ret;
   }
