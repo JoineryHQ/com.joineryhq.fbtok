@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <extension key="com.joineryhq.fbhash" type="module">
-  <file>FormBuilder Hash Filters</file>
-  <name>com.joineryhq.fbhash</name>
+  <file>fbhash</file>
+  <name>FormBuilder Hash Filters</name>
   <description>Allows site administrators to specify that, for certain FormBuilder forms, certain url parameters should be hashed in a way that makes them hard to guess.</description>
   <license>GPL-3.0</license>
   <authors>
