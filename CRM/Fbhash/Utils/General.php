@@ -11,7 +11,7 @@ class CRM_Fbhash_Utils_General {
   const HASH_SEPARATOR = '|';
 
   public static function getHashedFilterConfig() {
-    $extSettings = \Civi::settings()->get('com.joineryhq.fbhash');
+    $extSettings = \Civi::settings()->get(E::LONG_NAME);
     return ($extSettings['fbhash_hashedFilters'] ?? []);
   }
 
