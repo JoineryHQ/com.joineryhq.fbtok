@@ -1,13 +1,13 @@
 <?php
 
-use CRM_Fbhash_ExtensionUtil as E;
+use CRM_Fbtok_ExtensionUtil as E;
 
 /**
  * Description of CRM_Stepw_APIWrapper
  *
  * @author as
  */
-class CRM_Fbhash_APIWrapper {
+class CRM_Fbtok_APIWrapper {
 
   /**
    * API wrapper for 'prepare' events; delegates to private static methods in this class.
@@ -42,7 +42,7 @@ class CRM_Fbhash_APIWrapper {
     $params = $request->getParams();
     $filters = $params['filters'];
 
-    $filters = CRM_Fbhash_Utils_General::dehashFilters($params['afform'], $filters);
+    $filters = CRM_Fbtok_Utils_General::detokenizeFilters($params['afform'], $filters);
 
     $request->setFilters($filters);
   }

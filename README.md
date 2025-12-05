@@ -1,7 +1,7 @@
-# CiviCRM: FormBuilder hash filters
+# CiviCRM: FormBuilder tokenized filters
 
 This CiviCRM extension allows site administrators to specify that, for certain 
-FormBuilder forms, certain url parameters should be hashed in a way that makes
+FormBuilder forms, certain url parameters should be tokenized in a way that makes
 them hard to guess.
 
 **Example use case**
@@ -14,7 +14,7 @@ them hard to guess.
   the `membership_id` query parameter (e.g. `/#?member_id=124`, `/#?member_id=125`,
   etc.)
 - By using this extension, you can generate (and share) a URL in which the
-  membership_id is hashed in an unguessable way (e.g.
+  membership_id is tokenized in an unguessable way (e.g.
   https://example.org/civicrm/mem-stat/#?id=5a53990cc6f92f7d5cae2e4c8930cc8eb61694efa029c9d8eab9b3536d72cf9|123),
   so that merely changing the `123` to `124` will create a non-functional URL,
   thus protecting the privacy of member '124' (and other members).
@@ -27,11 +27,11 @@ exist.)
 Example (to be added to civicrm.settings.php):
 ```php
 global $civicrm_setting;
-$civicrm_setting['com.joineryhq.fbhash'] = [
+$civicrm_setting['com.joineryhq.fbtok'] = [
   // Bytes of entropy to be retained in hmac values.
-  'com.joineryhq.fbhash.tokenEntropyBytes' => 8,
-  // Filters to be hashed, per afform.
-  'com.joineryhq.fbhash.hashedFilters' => [
+  'com.joineryhq.fbtok.tokenEntropyBytes' => 8,
+  // Filters to be tokenized, per afform.
+  'com.joineryhq.fbtok.tokenizedFilters' => [
     'afsearchMembershipStatus' => [
       'id',
     ],
@@ -46,9 +46,9 @@ This nested array format is fragile but explicit, allowing to specify any url
 parameters for any FormBuilder form. The format is as follows:
 ```php
 global $civicrm_setting;
-$civicrm_setting['com.joineryhq.fbhash'] = [
-  'com.joineryhq.fbhash.tokenEntropyBytes' => [tokenEntropyBytes], 
-  'com.joineryhq.fbhash.hashedFilters'] = [
+$civicrm_setting['com.joineryhq.fbtok'] = [
+  'com.joineryhq.fbtok.tokenEntropyBytes' => [tokenEntropyBytes], 
+  'com.joineryhq.fbtok.tokenizedFilters'] = [
     [afformName] => [
       [queryParameterName],
     ],
@@ -69,25 +69,25 @@ Query paramter name, as defined in FormBuilder display settings Filters (url).
 
 ## Usage
 
-The hashing functionality is unlikely to be useful on its own. This extension
-provides a v4 API, `Fbhash.HashAfformUrl`, which can be called like so:
+The tokenizing functionality is unlikely to be useful on its own. This extension
+provides a v4 API, `Fbtok.TokenizeAfformUrl`, which can be called like so:
 
 ```php
     $filters = ['member_id' => '123'];
     $afformName = 'afsearchMembershipStatus';
-    $fbhash = \Civi\Api4\Fbhash::hashAfformUrl()
+    $fbtok = \Civi\Api4\Fbtok::tokenizeAfformUrl()
       ->setCheckPermissions(FALSE)
       ->setFilters($filters)
       ->setAfformName($afformName)
       ->execute()
       ->first();
-    $hashedUrl = $fbhash['url'];
+    $tokenizedUrl = $fbtok['url'];
 ```
 
-- Only query parameters which are defined in `$civicrm_setting['com.joineryhq.fbhash']['hashedFilters']` will be hashed.
-- For any FormBuilder form so defined, the defined query parameters will be hashed, and any access to that form will require that the given parameters have a valid hash.
-  - An invalid query parameter hash will cause no records to be loaded when the FormBuilder form is accessed.
-  - An empty value constitutes an invalid hash, thus making the given query parameter _required_.
+- Only query parameters which are defined in `$civicrm_setting['com.joineryhq.fbtok']['tokenizedFilters']` will be tokenized.
+- For any FormBuilder form so defined, the defined query parameters will be tokenized, and any access to that form will require that the given parameters have a valid token.
+  - An invalid query parameter token will cause no records to be loaded when the FormBuilder form is accessed.
+  - An empty value constitutes an invalid token, thus making the given query parameter _required_.
 
 ## How Token Generation Works (for the geeks in the audience)
 
@@ -118,15 +118,15 @@ required.
 This project is open to PRs for improvements, including the following:
 - Creation of a UI to replace configuration in civicrm.settings.php.
 - Display of a "No records found" or "Permission denied" message in the case of an
-  invalid hash value, instead of the current behavior showing merely blank results.
+  invalid token value, instead of the current behavior showing merely blank results.
 
 
 ## Installation
 * Copy this package to your CiviCRM extensions directory (in WordPress, that's typically `[document-root]/wp-content/uploads/civicrm/ext`
-* In CiviCRM, enable the extension "FormBuilder Hash Filters".
+* In CiviCRM, enable the extension "FormBuilder Tokenized Filters".
 
 ## Support
 
 Support for this plugin is handled under Joinery's ["As-Is Support" policy](https://joineryhq.com/software-support-levels#as-is-support).
 
-Public issue queue for this plugin: https://github.com/JoineryHQ/com.joineryhq.fbhash/issues
+Public issue queue for this plugin: https://github.com/JoineryHQ/com.joineryhq.fbtok/issues

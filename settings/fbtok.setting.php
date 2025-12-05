@@ -4,12 +4,12 @@
  * Settings metadata file
  */
 
-use CRM_Fbhash_ExtensionUtil as E;
+use CRM_Fbtok_ExtensionUtil as E;
 
 return [
-  'com.joineryhq.fbhash.tokenEntropyBytes' => [
-    'group_name' => 'com.joineryhq.fbhash',
-    'name' => 'com.joineryhq.fbhash.tokenEntropyBytes',
+  'com.joineryhq.fbtok.tokenEntropyBytes' => [
+    'group_name' => 'com.joineryhq.fbtok',
+    'name' => 'com.joineryhq.fbtok.tokenEntropyBytes',
     'type' => 'Integer',
     'html_type' => 'text',
     'default' => 8,
@@ -20,27 +20,27 @@ return [
     'description' => E::ts('Bytes of entropy to be retained in HMAC.'),
     'help_text' => NULL,
   ],
-  'com.joineryhq.fbhash.hashedFilters' => [
-    'group_name' => 'com.joineryhq.fbhash',
-    'name' => 'com.joineryhq.fbhash.hashedFilters',
+  'com.joineryhq.fbtok.tokenizedFilters' => [
+    'group_name' => 'com.joineryhq.fbtok',
+    'name' => 'com.joineryhq.fbtok.tokenizedFilters',
     'type' => 'Array',
     'html_type' => 'textarea',
     'default' => [],
     'add' => '5.0',
-    'title' => E::ts('Filters to be hashed, per afform'),
+    'title' => E::ts('Filters to be tokenized, per afform'),
     'is_domain' => 0,
     'is_contact' => 0,
     'description' => E::ts('Array of filters per afform.'),
     'help_text' => NULL,
   ],
-  'com.joineryhq.fbhash.hmacKey' => [
-    'group_name' => 'com.joineryhq.fbhash',
-    'name' => 'com.joineryhq.fbhash.hmacKey',
+  'com.joineryhq.fbtok.hmacKey' => [
+    'group_name' => 'com.joineryhq.fbtok',
+    'name' => 'com.joineryhq.fbtok.hmacKey',
     'type' => 'String',
     'html_type' => 'textarea',
     'default' => NULL,
     'add' => '5.0',
-    'title' => E::ts('Fbhash HMAC Key'),
+    'title' => E::ts('Fbtok HMAC Key'),
     'is_domain' => 0,
     'is_contact' => 0,
     'description' => E::ts('Secret key used for HMAC creation.'),

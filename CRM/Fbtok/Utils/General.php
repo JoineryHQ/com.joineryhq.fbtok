@@ -1,14 +1,14 @@
 <?php
 
-use CRM_Fbhash_ExtensionUtil as E;
+use CRM_Fbtok_ExtensionUtil as E;
 
 /**
  * General-purpose utilities for stepw extension.
  *
  */
-class CRM_Fbhash_Utils_General {
+class CRM_Fbtok_Utils_General {
 
-  const HASH_SEPARATOR = '|';
+  const VALUE_SEPARATOR = '|';
 
   public static function setSetting($settingName, $value) {
     $settingKey = E::LONG_NAME . '.' . $settingName;
@@ -32,12 +32,12 @@ class CRM_Fbhash_Utils_General {
     return $hmacKey;
   }
 
-  public static function getHashedFilters($afformName) {
-    $allFilters = self::getSetting('hashedFilters');
+  public static function getTokenizedFilters($afformName) {
+    $allFilters = self::getSetting('tokenizedFilters');
     return ($allFilters[$afformName] ?? []);
   }
 
-  public static function hashValue($value) {
+  public static function tokenizeValue($value) {
     $entropyBytes = self::getSetting('tokenEntropyBytes', 8);
     $secret = self::getHmacKey();
     $fullHmac = hash_hmac('sha256', (string) $value, $secret, TRUE);
@@ -50,13 +50,13 @@ class CRM_Fbhash_Utils_General {
     // remove trailing '=' padding
     $token = rtrim($urlSafeB64, '=');
 
-    $ret = $token . CRM_Fbhash_Utils_General::HASH_SEPARATOR . $value;
+    $ret = $token . CRM_Fbtok_Utils_General::VALUE_SEPARATOR . $value;
     return $ret;
   }
 
-  public static function getPlainValue($hashedValue) {
-    list($trash, $value) = explode(CRM_Fbhash_Utils_General::HASH_SEPARATOR, $hashedValue);
-    if ($hashedValue == CRM_Fbhash_Utils_General::hashValue($value)) {
+  public static function getPlainValue($tokenizedValue) {
+    list($trash, $value) = explode(CRM_Fbtok_Utils_General::VALUE_SEPARATOR, $tokenizedValue);
+    if ($tokenizedValue == CRM_Fbtok_Utils_General::tokenizeValue($value)) {
       return $value;
     }
     else {
@@ -64,14 +64,14 @@ class CRM_Fbhash_Utils_General {
     }
   }
 
-  public static function dehashFilters($afformName, $filters) {
+  public static function detokenizeFilters($afformName, $filters) {
     $ret = $filters;
-    foreach (CRM_Fbhash_Utils_General::getHashedFilters($afformName) as $filterKey) {
+    foreach (CRM_Fbtok_Utils_General::getTokenizedFilters($afformName) as $filterKey) {
       // fixme: I once thought this was a good idea, but why?
       // if (!array_key_exists($filterKey, $filters)) {
       //   continue;
       // }
-      if ($plainValue = CRM_Fbhash_Utils_General::getPlainValue($filters[$filterKey])) {
+      if ($plainValue = CRM_Fbtok_Utils_General::getPlainValue($filters[$filterKey])) {
         $ret[$filterKey] = $plainValue;
       }
       else {
@@ -81,13 +81,13 @@ class CRM_Fbhash_Utils_General {
     return $ret;
   }
 
-  public static function hashFilters($afformName, $filters) {
+  public static function tokenizeFilters($afformName, $filters) {
     $ret = $filters;
-    foreach (CRM_Fbhash_Utils_General::getHashedFilters($afformName) as $filterKey) {
+    foreach (CRM_Fbtok_Utils_General::getTokenizedFilters($afformName) as $filterKey) {
       if (!array_key_exists($filterKey, $filters)) {
         continue;
       }
-      $ret[$filterKey] = CRM_Fbhash_Utils_General::hashValue($filters[$filterKey]);
+      $ret[$filterKey] = CRM_Fbtok_Utils_General::tokenizeValue($filters[$filterKey]);
     }
     return $ret;
   }

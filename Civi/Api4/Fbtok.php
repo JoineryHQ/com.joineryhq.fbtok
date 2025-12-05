@@ -3,11 +3,11 @@
 namespace Civi\Api4;
 
 /**
- * API pseudo-entity for the FormBuilder Hash extension.
+ * API pseudo-entity for the FormBuilder Tokenizer extension.
  *
  * @package Civi\Api4
  */
-class Fbhash extends Generic\AbstractEntity {
+class Fbtok extends Generic\AbstractEntity {
 
   /**
    * Every entity **must** implement `getFields`.
@@ -40,7 +40,7 @@ class Fbhash extends Generic\AbstractEntity {
         ],
         [
           'name' => 'filters',
-          'description' => "Array of filters to be (hashed and then) appended to the URL",
+          'description' => "Array of filters to be (tokenized and then) appended to the URL",
         ],
       ];
     }))->setCheckPermissions($checkPermissions);
@@ -56,8 +56,8 @@ class Fbhash extends Generic\AbstractEntity {
    * @see \Civi\Api4\Generic\BasicReplaceAction
    * @return Generic\BasicReplaceAction
    */
-  public static function hashAfformUrl($checkPermissions = TRUE) {
-    return (new Action\Fbhash\HashAfformUrl(__CLASS__, __FUNCTION__))
+  public static function tokenizeAfformUrl($checkPermissions = TRUE) {
+    return (new Action\Fbtok\TokenizeAfformUrl(__CLASS__, __FUNCTION__))
       ->setCheckPermissions($checkPermissions);
   }
 

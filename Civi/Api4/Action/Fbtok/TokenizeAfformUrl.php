@@ -1,17 +1,17 @@
 <?php
 
-namespace Civi\Api4\Action\Fbhash;
+namespace Civi\Api4\Action\Fbtok;
 
 use Civi\Api4\Generic\Result;
 
 /**
  * For a given FormBuilder form, and a given set of filters (which would normally
- * be passed in the clear as URL query parameters), hash those filters and append
+ * be passed in the clear as URL query parameters), tokenize those filters and append
  * them to a valid URL for viewing that form.
  *
- * @package Civi\Api4\Action\Fbhash
+ * @package Civi\Api4\Action\Fbtok
  */
-class HashAfformUrl extends \Civi\Api4\Generic\AbstractAction {
+class TokenizeAfformUrl extends \Civi\Api4\Generic\AbstractAction {
 
   /**
    * Prefix to add to every random value.
@@ -57,7 +57,7 @@ class HashAfformUrl extends \Civi\Api4\Generic\AbstractAction {
     }
     $url = \CRM_Utils_System::url($afform['server_route'], NULL, TRUE, NULL, FALSE, ($afform['is_public'] ?? FALSE));
     if (!empty($this->filters)) {
-      $filters = \CRM_Fbhash_Utils_General::hashFilters($this->afformName, $this->filters);
+      $filters = \CRM_Fbtok_Utils_General::tokenizeFilters($this->afformName, $this->filters);
       $url .= '#/?' . http_build_query($filters);
     }
     $result[] = [

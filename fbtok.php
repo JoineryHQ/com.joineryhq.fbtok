@@ -1,16 +1,16 @@
 <?php
 
-require_once 'fbhash.civix.php';
+require_once 'fbtok.civix.php';
 
-use CRM_Fbhash_ExtensionUtil as E;
+use CRM_Fbtok_ExtensionUtil as E;
 
 /**
  * Implements hook_civicrm_config().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_config/
  */
-function fbhash_civicrm_config(&$config): void {
-  _fbhash_civix_civicrm_config($config);
+function fbtok_civicrm_config(&$config): void {
+  _fbtok_civix_civicrm_config($config);
 
   // This hook sometimes runs twice
   if (isset(Civi::$statics[__FUNCTION__])) {
@@ -18,8 +18,8 @@ function fbhash_civicrm_config(&$config): void {
   }
   Civi::$statics[__FUNCTION__] = 1;
 
-  Civi::dispatcher()->addListener('civi.api.prepare', ['CRM_Fbhash_APIWrapper', 'PREPARE'], -100);
-  Civi::dispatcher()->addListener('civi.api.respond', ['CRM_Fbhash_APIWrapper', 'RESPOND'], -100);
+  Civi::dispatcher()->addListener('civi.api.prepare', ['CRM_Fbtok_APIWrapper', 'PREPARE'], -100);
+  Civi::dispatcher()->addListener('civi.api.respond', ['CRM_Fbtok_APIWrapper', 'RESPOND'], -100);
 }
 
 /**
@@ -27,8 +27,8 @@ function fbhash_civicrm_config(&$config): void {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_install
  */
-function fbhash_civicrm_install(): void {
-  _fbhash_civix_civicrm_install();
+function fbtok_civicrm_install(): void {
+  _fbtok_civix_civicrm_install();
 }
 
 /**
@@ -36,6 +36,6 @@ function fbhash_civicrm_install(): void {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_enable
  */
-function fbhash_civicrm_enable(): void {
-  _fbhash_civix_civicrm_enable();
+function fbtok_civicrm_enable(): void {
+  _fbtok_civix_civicrm_enable();
 }

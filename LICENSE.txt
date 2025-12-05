@@ -1,4 +1,4 @@
-Package: com.joineryhq.fbhash
+Package: com.joineryhq.fbtok
 Copyright (C) 2025, Allen Shaw <allen@JoineryHQ.com>
 Licensed under GNU General Public License v3.0 only (below).
 
