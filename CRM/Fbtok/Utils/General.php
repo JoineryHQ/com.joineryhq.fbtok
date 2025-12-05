@@ -8,7 +8,7 @@ use CRM_Fbtok_ExtensionUtil as E;
  */
 class CRM_Fbtok_Utils_General {
 
-  const VALUE_SEPARATOR = '|';
+  const VALUE_SEPARATOR = '.';
 
   public static function setSetting($settingName, $value) {
     $settingKey = E::LONG_NAME . '.' . $settingName;
@@ -55,7 +55,10 @@ class CRM_Fbtok_Utils_General {
   }
 
   public static function getPlainValue($tokenizedValue) {
-    list($trash, $value) = explode(CRM_Fbtok_Utils_General::VALUE_SEPARATOR, $tokenizedValue);
+    // Split on separator (limit 2, since value itself may contain the separatator
+    // character, e.g. "[token].1.2" for a value of "1.2").
+    list($trash, $value) = explode(CRM_Fbtok_Utils_General::VALUE_SEPARATOR, $tokenizedValue, 2);
+    // Ensure plain value tokenizes to the given token.
     if ($tokenizedValue == CRM_Fbtok_Utils_General::tokenizeValue($value)) {
       return $value;
     }
