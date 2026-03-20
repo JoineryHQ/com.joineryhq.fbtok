@@ -89,6 +89,7 @@ class CRM_Fbtok_ExtensionUtil {
 
 use CRM_Fbtok_ExtensionUtil as E;
 
+pathload()->addSearchDir(__DIR__ . '/mixin/lib');
 spl_autoload_register('_fbtok_civix_class_loader', TRUE, TRUE);
 
 function _fbtok_civix_class_loader($class) {
