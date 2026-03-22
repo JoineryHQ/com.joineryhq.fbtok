@@ -127,6 +127,6 @@ This project is open to PRs for improvements, including the following:
 
 ## Support
 
-Support for this plugin is handled under Joinery's ["As-Is Support" policy](https://joineryhq.com/software-support-levels#as-is-support).
+Support for this package is handled under Joinery's ["As-Is Support" policy](https://joineryhq.com/software-support-levels#as-is-support).
 
-Public issue queue for this plugin: https://github.com/JoineryHQ/com.joineryhq.fbtok/issues
+Public issue queue for this package: https://github.com/JoineryHQ/com.joineryhq.fbtok/issues
